@@ -44,16 +44,16 @@ def execute(image_path, output_filename="app/src/output/output.jpg"):
             rect = cv2.minAreaRect(contour)
             box = cv2.boxPoints(rect)
             if _is_valid_box(contour, box):
-                cv2.drawContours(image, [box.astype(int)], -1, (0, 0, 255), 2)
+                cv2.drawContours(image, [box.astype(int)], -1, (189, 51, 164), 2)
                 detected_boxes.append(box)
 
 
     # Сохранение обработанного изображения в файл.
     # Отображение изображения в новом окне.
-    cv2.imshow(window_title, image)
-    cv2.waitKey(0)
-    cv2.destroyWindow(window_title)
-    cv2.imwrite(output_filename, image)
+    #cv2.imshow(window_title, image)
+    #cv2.waitKey(0)
+    #cv2.destroyWindow(window_title)
+    #cv2.imwrite(output_filename, image)
 
     # Создание JSON-выходных данных с обнаруженными прямоугольниками.
     boxes_data = {
