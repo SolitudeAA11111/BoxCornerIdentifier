@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "4fba676e-bd84-483f-83b2-96fd9664522e",
+		"name": "BoxCornerIdentifier API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36938350"
+	},
+	"item": [
+		{
+			"name": "Upload_Image and JSON",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var requestData = {\r",
+							"    \"username\": \"admin\",\r",
+							"    \"password\": \"admin\"\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8000/api/token/',\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify(requestData)\r",
+							"    }\r",
+							"}, function (err, response) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = response.json();\r",
+							"        pm.environment.set(\"accessToken\", jsonData.access);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/GIT/3d_Model/3d_scan/3d20/11_Color.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"upload"
+					]
+				},
+				"description": "### Upload Image\n\nThis endpoint allows users to upload an image using a POST request with form-data as the request body type.\n\n#### Request Body\n\n- **image** (file): The image file to be uploaded.\n    \n\n#### Response\n\n- **Status**: 201\n    \n- **Content-Type**: application/json\n    \n- The response contains an object with multiple key-value pairs, where each key represents a specific area in the uploaded image. Each key contains the coordinates (x1, y1, x2, y2, x3, y3, x4, y4) representing the vertices of a bounding box around the identified area in the image."
+			},
+			"response": []
+		},
+		{
+			"name": "Access token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Save access token\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"accessToken\", jsonData.access);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/token/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				},
+				"description": "### Create Token\n\nThis endpoint allows the user to obtain an authentication token by providing valid credentials in the request body.\n\n**Request Body**\n\n- `username` (text, required): The username of the user.\n    \n- `password` (text, required): The password of the user.\n    \n\n**Response**  \nUpon successful authentication, the response will include a token along with its expiration time."
+			},
+			"response": []
+		},
+		{
+			"name": "Swagger documentation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/schema/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"schema",
+						""
+					]
+				},
+				"description": "### Retrieve API Schema\n\nThis endpoint makes an HTTP GET request to retrieve the schema for the API.\n\n#### Request Body\n\nThis request does not require a request body.\n\n#### Response\n\nThe response will include the schema for the API, providing information about the available endpoints, request parameters, and response data structures."
+			},
+			"response": []
+		}
+	]
+}
